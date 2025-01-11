@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 0 0% 0%;
+  --foreground: 45 93% 47%;
+  
+  --card: 180 40% 10%;
+  --card-foreground: 45 93% 47%;
+  
+  --popover: 180 40% 10%;
+  --popover-foreground: 45 93% 47%;
+  
+  --primary: 45 93% 47%;
+  --primary-foreground: 0 0% 0%;
+  
+  --secondary: 180 40% 15%;
+  --secondary-foreground: 45 93% 47%;
+  
+  --muted: 180 40% 15%;
+  --muted-foreground: 45 93% 60%;
+  
+  --accent: 45 93% 47%;
+  --accent-foreground: 0 0% 0%;
+  
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  
+  --border: 180 40% 20%;
+  --input: 180 40% 20%;
+  --ring: 45 93% 47%;
+  
+  --radius: 0.5rem;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: .5;
+    }
+  }
+}
+
