@@ -99,9 +99,15 @@ export default function EditMacroModal({
                   />
                   <button
                     onClick={() => setIsListening(true)}
-                    className="px-4 py-2 bg-amber-500 text-black rounded-r-md hover:bg-amber-400"
+                    className="px-4 py-2 bg-amber-500 text-black hover:bg-amber-400"
                   >
                     {isListening ? "监听中" : "设置"}
+                  </button>
+                  <button
+                    onClick={() => setShortcut('')}
+                    className="px-4 py-2 bg-red-500 text-white rounded-r-md hover:bg-red-400"
+                  >
+                    删除
                   </button>
                 </div>
               </div>

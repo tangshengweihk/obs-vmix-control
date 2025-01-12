@@ -1,10 +1,19 @@
 import { Switch } from '@/components/ui/switch'
 
 interface StatusModuleProps {
-  softwareType: 'OBS' | 'VMIX'
+  softwareType: 'OBS' | 'VMIX';
+  connected: boolean;
+  autoReconnect: boolean;
+  onAutoReconnectChange: (checked: boolean) => void;
+  ws: WebSocket | null;
 }
 
-export default function StatusModule({ softwareType }: StatusModuleProps) {
+export default function StatusModule({ 
+  softwareType, 
+  connected, 
+  autoReconnect,
+  onAutoReconnectChange 
+}: StatusModuleProps) {
   if (softwareType === 'VMIX') {
     return null
   }
@@ -20,10 +29,16 @@ export default function StatusModule({ softwareType }: StatusModuleProps) {
               <h3 className="text-sm text-gray-400">连接状态</h3>
               <div className="flex items-center gap-2">
                 <span className="text-xs text-gray-400">自动重连</span>
-                <Switch className="data-[state=checked]:bg-amber-400" />
+                <Switch 
+                  checked={autoReconnect}
+                  onCheckedChange={onAutoReconnectChange}
+                  className="data-[state=checked]:bg-amber-400" 
+                />
               </div>
             </div>
-            <p className="text-emerald-400 text-lg font-medium mt-2">connected</p>
+            <p className={`text-lg font-medium mt-2 ${connected ? 'text-emerald-400' : 'text-red-400'}`}>
+              {connected ? 'connected' : 'disconnected'}
+            </p>
           </div>
         </div>
 

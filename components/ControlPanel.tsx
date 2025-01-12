@@ -17,10 +17,14 @@ interface Panel {
   softwareType: 'OBS' | 'VMIX'
   ip: string
   port: string
+  connected: boolean
+  autoReconnect: boolean
+  ws: WebSocket | null
 }
 
 interface ControlPanelProps {
   panel: Panel
+  onPanelUpdate?: (panel: Panel) => void
 }
 
 const fadeIn = {
@@ -28,7 +32,7 @@ const fadeIn = {
   visible: { opacity: 1, transition: { duration: 0.3 } }
 }
 
-export default function ControlPanel({ panel }: ControlPanelProps) {
+export default function ControlPanel({ panel, onPanelUpdate }: ControlPanelProps) {
   if (panel.softwareType === 'VMIX') {
     return (
       <motion.div
@@ -44,7 +48,7 @@ export default function ControlPanel({ panel }: ControlPanelProps) {
             <div className="text-gray-400 text-xs sm:text-sm">
               已接到到 <span className="text-amber-400">VMIX</span>，地址：{panel.ip}:{panel.port}
             </div>
-            <StreamControls softwareType="VMIX" />
+            <StreamControls softwareType="VMIX" ws={panel.ws} />
             <StingerModule />
           </div>
           
@@ -81,25 +85,37 @@ export default function ControlPanel({ panel }: ControlPanelProps) {
         <div className="w-full lg:w-80 space-y-4">
           <div className="text-amber-400 text-xl sm:text-2xl font-bold">{panel.name}</div>
           <div className="text-gray-400 text-xs sm:text-sm">
-            已连接到 <span className="text-amber-400">OBS</span>，地址：{panel.ip}:{panel.port}
+            已连接到 <span className="text-amber-400">{panel.softwareType}</span>，地址：{panel.ip}:{panel.port}
           </div>
-          <StatusModule softwareType="OBS" />
-          <StreamControls softwareType="OBS" />
+          <StatusModule 
+            softwareType={panel.softwareType}
+            connected={panel.connected}
+            autoReconnect={panel.autoReconnect}
+            onAutoReconnectChange={(checked) => {
+              const updatedPanel = { ...panel, autoReconnect: checked };
+              onPanelUpdate?.(updatedPanel);
+            }}
+            ws={panel.ws}
+          />
+          <StreamControls 
+            softwareType={panel.softwareType} 
+            ws={panel.ws}
+          />
         </div>
         
         {/* Right Side - Main Content */}
         <div className="flex-1 space-y-4">
-          <MacroModule softwareType="OBS" />
-          <ProgramModule softwareType="OBS" />
+          <MacroModule softwareType={panel.softwareType} />
+          <ProgramModule softwareType={panel.softwareType} />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4">
             <div className="sm:col-span-1 lg:col-span-4">
-              <AudioMixer softwareType="OBS" />
+              <AudioMixer softwareType={panel.softwareType} />
             </div>
             <div className="sm:col-span-1 lg:col-span-5">
-              <KeyModule softwareType="OBS" />
+              <KeyModule softwareType={panel.softwareType} />
             </div>
             <div className="sm:col-span-1 lg:col-span-3">
-              <TransitionControls softwareType="OBS" />
+              <TransitionControls softwareType={panel.softwareType} />
             </div>
           </div>
         </div>
